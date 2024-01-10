@@ -14,7 +14,7 @@ def main(sitename, inputpath, outputpath, datetimerange):
 
     # Select raw input file path
     # e.g.: "<PROJECT FOLDER>/eddypro_output/eddypro_raw_datasets/level_6/"
-    configure.raw_kwargs = {'path': str(os.path.join(inputpath, 'eddypro_output', 'eddypro_raw_datasets/level_6'))}
+    configure.raw_kwargs = {'path': str(os.path.join(inputpath, 'eddypro_raw_datasets/level_6'))}
 
     # Select covariances
     # x*y → Cov(x, y)
