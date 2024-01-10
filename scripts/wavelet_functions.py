@@ -40,7 +40,6 @@ import copy
 # 3rd party modules
 import pywt
 import pycwt
-import fcwt
 from functools import reduce
 import numpy as np
 import pandas as pd
@@ -48,45 +47,6 @@ import itertools
 
 # Project modules
 from .coimbra2024_scripts import *
-
-def __cwt__(input, fs, f0, f1, fn, nthreads=1, scaling="log", fast=False, norm=True, Morlet=6.0):
-    """
-    function: performs Continuous Wavelet Transform
-    call: __cwt__()
-    Input:
-        a: 
-    Return:
-        b: 
-    """
-
-    #check if input is array and not matrix
-    if input.ndim > 1:
-        raise ValueError("Input must be a vector")
-
-    #check if input is single precision and change to single precision if not
-    if input.dtype != 'single':
-        input = input.astype('single')
-
-    morl = fcwt.Morlet(Morlet) #use Morlet wavelet with a wavelet-parameter
-
-    #Generate scales
-
-    if scaling == "lin":
-        scales = fcwt.Scales(morl,fcwt.FCWT_LINFREQS,fs,f0,f1,fn)
-    elif scaling == "log":
-        scales = fcwt.Scales(morl,fcwt.FCWT_LOGSCALES,fs,f0,f1,fn)
-    else:
-        scales = fcwt.Scales(morl,fcwt.FCWT_LOGSCALES,fs,f0,f1,fn)
-
-    _fcwt = fcwt.FCWT(morl, int(nthreads), fast, norm)
-
-    output = np.zeros((fn,input.size), dtype='csingle')
-    freqs = np.zeros((fn), dtype='single')
-    
-    _fcwt.cwt(input,scales,output)
-    scales.getFrequencies(freqs)
-
-    return freqs, output
 
 
 def __icwt__(W, sj, dt, dj, Cd=None, psi=None, wavelet=pycwt.wavelet.Morlet(6)):
@@ -202,11 +162,8 @@ def universal_wt(signal, method, fs=20, f0=1/(3*60*60), f1=10, fn=100,
     
     elif method == 'fcwt':
         """Run Continuous Wavelet Transform, using fast algorithm"""
-        _l, wave = __cwt__(signal, fs, f0, f1, fn, **kwargs)
-        sj = np.log2(fs/_l)
-        if inv:
-            wave = __icwt__(wave, sj=sj, dt=fs, dj=dj, **kwargs, 
-                        mother=pycwt.wavelet.Morlet(6))
+        warnings.warn('Not available in this version, running CWT. Check https://github.com/pedrohenriquecoimbra/coimbra-et-al-wavelet-based-partitioning.')
+        method = 'cwt' 
     
     elif method == 'cwt':
         """Run Continuous Wavelet Transform"""

@@ -1,7 +1,6 @@
 colorama==0.4.6
 contourpy==1.1.1
 cycler==0.12.1
-fCWT==0.1.18
 fonttools==4.47.0
 importlib-resources==6.1.1
 kiwisolver==1.4.5
