@@ -5,7 +5,7 @@ import sys
 import scripts.coimbra2024_scripts as coimbra2024
 import scripts.wavelet_functions as wavelet_functions
 
-def main(sitename, inputpath, outputpath, datetimerange):
+def main(sitename, inputpath, outputpath, datetimerange, samplingrate=20):
     # Create setup
     configure = coimbra2024.structuredData()
 
@@ -28,12 +28,16 @@ def main(sitename, inputpath, outputpath, datetimerange):
     # Select wavelet method
     configure.method = 'dwt'
 
+    # Select dt
+    configure.wt_kwargs = {'fs': samplingrate}
+    configure.raw_kwargs.update({'fkwargs': {'dt': 1/samplingrate}})
+
     # RUN WAVELET FLUX PROCESSING
     wavelet_functions.run_wt(**vars(configure), verbosity=5)
 
     # Merge into a single file
     coimbra2024.concat_into_single_file(
-        outputpath, str(sitename)+'_CDWT_full_cospectra.+.30mn.csv', 
+        os.path.join(outputpath, 'data'), str(sitename)+'_CDWT_full_cospectra.+.30mn.csv', 
         output_path=os.path.join(outputpath, str(sitename)+'_CDWT_full_cospectra_unique.30mn.csv'))
 
 
@@ -48,6 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--inputpath',  type=str, required=False)
     parser.add_argument('-o', '--outputpath', type=str, required=False)
     parser.add_argument('-d', '--datetimerange', type=str, required=False)
+    parser.add_argument('-sr', '--samplingrate', type=str, required=False)
     args = parser.parse_args()
 
     main(**vars(args))
