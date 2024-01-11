@@ -2,3 +2,9 @@
 data/*
 data/tmp/*
 data/deprecated/*
+scripts/FFP_Python
+scripts/footprint.py
+scripts/satelite.py
+scripts/common.py
+style/coimbraetal.mplstyle
+figures.ipynb
