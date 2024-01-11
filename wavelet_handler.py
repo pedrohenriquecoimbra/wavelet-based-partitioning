@@ -38,7 +38,7 @@ def main(sitename, inputpath, outputpath, datetimerange, samplingrate=20):
     # Merge into a single file
     coimbra2024.concat_into_single_file(
         os.path.join(outputpath, 'data'), str(sitename)+'_CDWT_full_cospectra.+.30mn.csv', 
-        output_path=os.path.join(outputpath, str(sitename)+'_CDWT_full_cospectra_unique.30mn.csv'))
+        output_path=os.path.join(outputpath, str(sitename)+'_CDWT_full_cospectra.30mn.csv'))
 
 
 if __name__ == '__main__':
