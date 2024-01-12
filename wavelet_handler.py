@@ -5,7 +5,7 @@ import sys
 import scripts.coimbra2024_scripts as coimbra2024
 import scripts.wavelet_functions as wavelet_functions
 
-def main(sitename, inputpath, outputpath, datetimerange, samplingrate=20):
+def main(sitename, inputpath, outputpath, datetimerange, samplingrate=20, fileduration=30):
     # Create setup
     configure = coimbra2024.structuredData()
 
@@ -23,7 +23,7 @@ def main(sitename, inputpath, outputpath, datetimerange, samplingrate=20):
 
     # Select period of interest
     # [START_DATE, END_DATE, FILE_FREQUENCY]
-    configure.ymd = [datetimerange.split('-')[0], datetimerange.split('-')[1], '30min']
+    configure.ymd = [datetimerange.split('-')[0], datetimerange.split('-')[1], f'{fileduration}min']
 
     # Select wavelet method
     configure.method = 'dwt'
@@ -48,8 +48,10 @@ if __name__ == '__main__':
     parser.add_argument('inputpath',  type=str)
     parser.add_argument('outputpath', type=str)
     parser.add_argument('datetimerange', type=str)
-    parser.add_argument('samplingrate', type=float, nargs='?', default=20)
-    parser.add_argument('-sr', '--samplingrate', type=float, default=20)
+    parser.add_argument('samplingrate', type=int, nargs='?', default=20)
+    parser.add_argument('fileduration', type=int, nargs='?', default=30)
+    parser.add_argument('-sr', '--samplingrate', type=int, default=20)
+    parser.add_argument('-fd', '--fileduration', type=int, default=30)
     args = parser.parse_args()
 
     main(**vars(args))
