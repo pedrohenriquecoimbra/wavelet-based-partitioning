@@ -1,6 +1,6 @@
 
 
-cleanFlux <- function(path_workset, path_ecmd, path_output=NULL, FileName=NULL, plotQC=FALSE, storage=FALSE,
+cleanFluxWL <- function(path_workset, path_ecmd, path_output=NULL, FileName=NULL, plotQC=FALSE, storage=FALSE,
                       applyINT=TRUE, applyLSR=TRUE, applySC=TRUE, applyITC=TRUE, applyST=TRUE){
 
 ec_data0 <- fread(path_workset, sep=",", header=TRUE, data.table=FALSE, na.strings=c(NA, "-9999"))
@@ -343,75 +343,75 @@ ITC_ModEr <- which(ec_data[,"itc_w"] > 30 & ec_data[,"itc_w"] <= 100)
 #
 #################################################################################################################################################################################################################
 
-NEE_SevEr_ind <- ifelse(applyINT, INT_NEE_SevEr, zero_vector)
-NEE_SevEr_ind <- union(applyLSR,  union(NEE_SevEr_ind, LSR_NEE_SevEr), NEE_SevEr_ind)
-NEE_SevEr_ind <- union(applySC,   union(NEE_SevEr_ind, SC_NEE_SevEr),  NEE_SevEr_ind)
-NEE_SevEr_ind <- union(applyITC,  union(NEE_SevEr_ind, ITC_SevEr),     NEE_SevEr_ind)
-NEE_SevEr_ind <- union(applyST,   union(NEE_SevEr_ind, ST_NEE_SevEr),  NEE_SevEr_ind)
+NEE_SevEr_ind <- INT_NEE_SevEr
+NEE_SevEr_ind <- switch(applyLSR+1, NEE_SevEr_ind, union(NEE_SevEr_ind, LSR_NEE_SevEr))
+NEE_SevEr_ind <- switch(applySC+1,  NEE_SevEr_ind,  union(NEE_SevEr_ind, SC_NEE_SevEr))
+NEE_SevEr_ind <- switch(applyITC+1, NEE_SevEr_ind, union(NEE_SevEr_ind, ITC_SevEr))
+NEE_SevEr_ind <- switch(applyST+1,  NEE_SevEr_ind,  union(NEE_SevEr_ind, ST_NEE_SevEr))
 #NEE_SevEr_ind <- union(union(union(union(INT_NEE_SevEr, LSR_NEE_SevEr), SC_NEE_SevEr), ITC_SevEr), ST_NEE_SevEr)
 NEE_SevEr_flag <- replace(zero_vector, NEE_SevEr_ind, rep(1, length(NEE_SevEr_ind)))
 length(which(NEE_SevEr_flag==1))/N*100
 
-LE_SevEr_ind <- ifelse(applyINT, INT_LE_SevEr, zero_vector)
-LE_SevEr_ind <- union(applyLSR,  union(LE_SevEr_ind, LSR_LE_SevEr), LE_SevEr_ind)
-LE_SevEr_ind <- union(applySC,   union(LE_SevEr_ind, SC_LE_SevEr),  LE_SevEr_ind)
-LE_SevEr_ind <- union(applyITC,  union(LE_SevEr_ind, ITC_SevEr),    LE_SevEr_ind)
-LE_SevEr_ind <- union(applyST,   union(LE_SevEr_ind, ST_LE_SevEr),  LE_SevEr_ind)
+LE_SevEr_ind <- INT_LE_SevEr
+LE_SevEr_ind <- switch(applyLSR+1, LE_SevEr_ind, union(LE_SevEr_ind, LSR_LE_SevEr))
+LE_SevEr_ind <- switch(applySC+1,  LE_SevEr_ind,  union(LE_SevEr_ind, SC_LE_SevEr))
+LE_SevEr_ind <- switch(applyITC+1, LE_SevEr_ind, union(LE_SevEr_ind, ITC_SevEr))
+LE_SevEr_ind <- switch(applyST+1,  LE_SevEr_ind,  union(LE_SevEr_ind, ST_LE_SevEr))
 #LE_SevEr_ind <- union(union(union(union(INT_LE_SevEr, LSR_LE_SevEr), SC_LE_SevEr), ITC_SevEr),ST_LE_SevEr)
 LE_SevEr_flag <- replace(zero_vector, LE_SevEr_ind, rep(1, length(LE_SevEr_ind)))
 length(which(LE_SevEr_flag==1))/N*100
 
-H_SevEr_ind <- ifelse(applyINT, INT_H_SevEr, zero_vector)
-H_SevEr_ind <- union(applyLSR,  union(H_SevEr_ind, LSR_H_SevEr), H_SevEr_ind)
-H_SevEr_ind <- union(applySC,   union(H_SevEr_ind, SC_H_SevEr),  H_SevEr_ind)
-H_SevEr_ind <- union(applyITC,  union(H_SevEr_ind, ITC_SevEr),    H_SevEr_ind)
-H_SevEr_ind <- union(applyST,   union(H_SevEr_ind, ST_H_SevEr),  H_SevEr_ind)
+H_SevEr_ind <- INT_H_SevEr
+H_SevEr_ind <- switch(applyLSR+1, H_SevEr_ind, union(H_SevEr_ind, LSR_H_SevEr))
+H_SevEr_ind <- switch(applySC+1,  H_SevEr_ind,  union(H_SevEr_ind, SC_H_SevEr))
+H_SevEr_ind <- switch(applyITC+1, H_SevEr_ind, union(H_SevEr_ind, ITC_SevEr))
+H_SevEr_ind <- switch(applyST+1,  H_SevEr_ind,  union(H_SevEr_ind, ST_H_SevEr))
 #H_SevEr_ind <- union(union(union(union(INT_H_SevEr, LSR_H_SevEr), SC_H_SevEr), ITC_SevEr),ST_H_SevEr)
 H_SevEr_flag <- replace(zero_vector, H_SevEr_ind, rep(1, length(H_SevEr_ind)))
 length(which(H_SevEr_flag==1))/N*100
 
-TAU_SevEr_ind <- ifelse(applyINT, INT_TAU_SevEr, zero_vector)
-TAU_SevEr_ind <- union(applyLSR,  union(TAU_SevEr_ind, LSR_TAU_SevEr), TAU_SevEr_ind)
-TAU_SevEr_ind <- union(applySC,   union(TAU_SevEr_ind, SC_TAU_SevEr),  TAU_SevEr_ind)
-TAU_SevEr_ind <- union(applyITC,  union(TAU_SevEr_ind, ITC_SevEr),     TAU_SevEr_ind)
-TAU_SevEr_ind <- union(applyST,   union(TAU_SevEr_ind, ST_TAU_SevEr),  TAU_SevEr_ind)
+TAU_SevEr_ind <- INT_TAU_SevEr
+TAU_SevEr_ind <- switch(applyLSR+1, TAU_SevEr_ind, union(TAU_SevEr_ind, LSR_TAU_SevEr))
+TAU_SevEr_ind <- switch(applySC+1, TAU_SevEr_ind,  union(TAU_SevEr_ind, SC_TAU_SevEr))
+TAU_SevEr_ind <- switch(applyITC+1, TAU_SevEr_ind, union(TAU_SevEr_ind, ITC_SevEr))
+TAU_SevEr_ind <- switch(applyST+1, TAU_SevEr_ind,  union(TAU_SevEr_ind, ST_TAU_SevEr))
 #TAU_SevEr_ind <- union(union(union(union(INT_TAU_SevEr, LSR_TAU_SevEr), SC_TAU_SevEr), ITC_SevEr),ST_TAU_SevEr)
 TAU_SevEr_flag <- replace(zero_vector, TAU_SevEr_ind, rep(1, length(TAU_SevEr_ind)))
 length(which(TAU_SevEr_flag==1))/N*100
 
 
-NEE_ModEr_ind <- ifelse(applyINT, INT_NEE_ModEr, zero_vector)
-NEE_ModEr_ind <- union(applyLSR,  union(NEE_ModEr_ind, LSR_NEE_ModEr), NEE_ModEr_ind)
-NEE_ModEr_ind <- union(applySC,   union(NEE_ModEr_ind, SC_NEE_ModEr),  NEE_ModEr_ind)
-NEE_ModEr_ind <- union(applyITC,  union(NEE_ModEr_ind, ITC_ModEr),     NEE_ModEr_ind)
-NEE_ModEr_ind <- union(applyST,   union(NEE_ModEr_ind, ST_NEE_ModEr),  NEE_ModEr_ind)
+NEE_ModEr_ind <- INT_NEE_ModEr
+NEE_ModEr_ind <- switch(applyLSR+1, NEE_ModEr_ind, union(NEE_ModEr_ind, LSR_NEE_ModEr))
+NEE_ModEr_ind <- switch(applySC+1,  NEE_ModEr_ind,  union(NEE_ModEr_ind, SC_NEE_ModEr))
+NEE_ModEr_ind <- switch(applyITC+1, NEE_ModEr_ind, union(NEE_ModEr_ind, ITC_ModEr))
+NEE_ModEr_ind <- switch(applyST+1,  NEE_ModEr_ind,  union(NEE_ModEr_ind, ST_NEE_ModEr))
 #NEE_ModEr_ind <- union(union(union(union(INT_NEE_ModEr, LSR_NEE_ModEr), SC_NEE_ModEr), ITC_ModEr), ST_NEE_ModEr)
 NEE_ModEr_flag <- replace(replace(zero_vector, NEE_ModEr_ind, rep(1, length(NEE_ModEr_ind))), NEE_SevEr_ind, NA)
 length(which(NEE_ModEr_flag==1))/N*100
 
-LE_ModEr_ind <- ifelse(applyINT, INT_LE_ModEr, zero_vector)
-LE_ModEr_ind <- union(applyLSR,  union(LE_ModEr_ind, LSR_LE_ModEr), LE_ModEr_ind)
-LE_ModEr_ind <- union(applySC,   union(LE_ModEr_ind, SC_LE_ModEr),  LE_ModEr_ind)
-LE_ModEr_ind <- union(applyITC,  union(LE_ModEr_ind, ITC_ModEr),    LE_ModEr_ind)
-LE_ModEr_ind <- union(applyST,   union(LE_ModEr_ind, ST_LE_ModEr),  LE_ModEr_ind)
+LE_ModEr_ind <- INT_LE_ModEr
+LE_ModEr_ind <- switch(applyLSR+1, LE_ModEr_ind, union(LE_ModEr_ind, LSR_LE_ModEr))
+LE_ModEr_ind <- switch(applySC+1,  LE_ModEr_ind,  union(LE_ModEr_ind, SC_LE_ModEr))
+LE_ModEr_ind <- switch(applyITC+1, LE_ModEr_ind, union(LE_ModEr_ind, ITC_ModEr))
+LE_ModEr_ind <- switch(applyST+1,  LE_ModEr_ind,  union(LE_ModEr_ind, ST_LE_ModEr))
 #LE_ModEr_ind <- union(union(union(union(INT_LE_ModEr, LSR_LE_ModEr), SC_LE_ModEr), ITC_ModEr), ST_LE_ModEr)
 LE_ModEr_flag <- replace(replace(zero_vector, LE_ModEr_ind, rep(1, length(LE_ModEr_ind))), LE_SevEr_ind, NA)
 length(which(LE_ModEr_flag==1))/N*100
 
-H_ModEr_ind <- ifelse(applyINT, INT_H_ModEr, zero_vector)
-H_ModEr_ind <- union(applyLSR,  union(H_ModEr_ind, LSR_H_ModEr), H_ModEr_ind)
-H_ModEr_ind <- union(applySC,   union(H_ModEr_ind, SC_H_ModEr),  H_ModEr_ind)
-H_ModEr_ind <- union(applyITC,  union(H_ModEr_ind, ITC_ModEr),    H_ModEr_ind)
-H_ModEr_ind <- union(applyST,   union(H_ModEr_ind, ST_H_ModEr),  H_ModEr_ind)
+H_ModEr_ind <- INT_H_ModEr
+H_ModEr_ind <- switch(applyLSR+1, H_ModEr_ind, union(H_ModEr_ind, LSR_H_ModEr))
+H_ModEr_ind <- switch(applySC+1,  H_ModEr_ind,  union(H_ModEr_ind, SC_H_ModEr))
+H_ModEr_ind <- switch(applyITC+1, H_ModEr_ind, union(H_ModEr_ind, ITC_ModEr))
+H_ModEr_ind <- switch(applyST+1,  H_ModEr_ind,  union(H_ModEr_ind, ST_H_ModEr))
 #H_ModEr_ind <- union(union(union(union(INT_H_ModEr, LSR_H_ModEr), SC_H_ModEr), ITC_ModEr), ST_H_ModEr)
 H_ModEr_flag <- replace(replace(zero_vector, H_ModEr_ind, rep(1, length(H_ModEr_ind))), H_SevEr_ind, NA)
 length(which(H_ModEr_flag==1))/N*100
 
-TAU_ModEr_ind <- ifelse(applyINT, INT_TAU_ModEr, zero_vector)
-TAU_ModEr_ind <- union(applyLSR,  union(TAU_ModEr_ind, LSR_TAU_ModEr), TAU_ModEr_ind)
-TAU_ModEr_ind <- union(applySC,   union(TAU_ModEr_ind, SC_TAU_ModEr),  TAU_ModEr_ind)
-TAU_ModEr_ind <- union(applyITC,  union(TAU_ModEr_ind, ITC_ModEr),     TAU_ModEr_ind)
-TAU_ModEr_ind <- union(applyST,   union(TAU_ModEr_ind, ST_TAU_ModEr),  TAU_ModEr_ind)
+TAU_ModEr_ind <- INT_TAU_ModEr
+TAU_ModEr_ind <- switch(applyLSR+1, TAU_ModEr_ind, union(TAU_ModEr_ind, LSR_TAU_ModEr))
+TAU_ModEr_ind <- switch(applySC+1,  TAU_ModEr_ind,  union(TAU_ModEr_ind, SC_TAU_ModEr))
+TAU_ModEr_ind <- switch(applyITC+1, TAU_ModEr_ind, union(TAU_ModEr_ind, ITC_ModEr))
+TAU_ModEr_ind <- switch(applyST+1,  TAU_ModEr_ind,  union(TAU_ModEr_ind, ST_TAU_ModEr))
 #TAU_ModEr_ind <- union(union(union(union(INT_TAU_ModEr, LSR_TAU_ModEr), SC_TAU_ModEr), ITC_ModEr), ST_TAU_ModEr)
 TAU_ModEr_flag <- replace(replace(zero_vector, TAU_ModEr_ind, rep(1, length(TAU_ModEr_ind))), TAU_SevEr_ind, NA)
 length(which(TAU_ModEr_flag==1))/N*100
@@ -422,10 +422,10 @@ length(which(TAU_ModEr_flag==1))/N*100
 # Filtering for severe flags
 #
 #################################################################################################################################################################################################################
-NEE1 <- ifelse(applyINT, replace(as.vector(NEE_raw), INT_NEE_SevEr, NA), NEE_raw)
-NEE2 <- ifelse(applyLSR, replace(NEE1, LSR_NEE_SevEr, NA), NEE1)
-NEE3 <- ifelse(applySC,  replace(NEE2, SC_NEE_SevEr,NA),   NEE2)
-NEE4 <- ifelse(applyITC, replace(NEE3, ITC_SevEr, NA),     NEE3)
+NEE1 <- switch(applyINT+1, NEE_raw, replace(as.vector(NEE_raw), INT_NEE_SevEr, NA))
+NEE2 <- switch(applyLSR+1, NEE1, replace(NEE1, LSR_NEE_SevEr, NA))
+NEE3 <- switch(applySC+1,  NEE2, replace(NEE2, SC_NEE_SevEr,NA))
+NEE4 <- switch(applyITC+1, NEE3, replace(NEE3, ITC_SevEr, NA))
 
 if(storage==TRUE) {
 	oor_Sc <- c(which(ec_data[,"CO2str"]>70), which(ec_data[,"CO2str"]< -100));
@@ -436,26 +436,26 @@ if(storage==TRUE) {
 
 if(storage==FALSE) Sc <- rep(0,N)
 
-NEE5 <- ifelse(applyST, replace(NEE4, ST_NEE_SevEr, NA) + Sc, NEE4 + Sc)
+NEE5 <- switch(applyST+1, NEE4 + Sc, replace(NEE4, ST_NEE_SevEr, NA) + Sc)
 
 
-LE1 <- ifelse(applyINT, replace(as.vector(LE_raw), INT_LE_SevEr, NA), LE_raw)
-LE2 <- ifelse(applyLSR, replace(LE1, LSR_LE_SevEr, NA), LE1)
-LE3 <- ifelse(applySC,  replace(LE2, SC_LE_SevEr,NA),   LE2)
-LE4 <- ifelse(applyITC, replace(LE3, ITC_SevEr, NA),    LE3)
-LE5 <- ifelse(applyST,  replace(LE4, ST_LE_SevEr, NA),  LE4)
+LE1 <- switch(applyINT+1, LE_raw, replace(as.vector(LE_raw), INT_LE_SevEr, NA))
+LE2 <- switch(applyLSR+1, LE1, replace(LE1, LSR_LE_SevEr, NA))
+LE3 <- switch(applySC+1,  LE2, replace(LE2, SC_LE_SevEr,NA))
+LE4 <- switch(applyITC+1, LE3, replace(LE3, ITC_SevEr, NA))
+LE5 <- switch(applyST+1,  LE4, replace(LE4, ST_LE_SevEr, NA))
 
-H1 <- ifelse(applyINT, replace(as.vector(H_raw), INT_H_SevEr, NA), H_raw)
-H2 <- ifelse(applyLSR, replace(H1, LSR_H_SevEr, NA), H1)
-H3 <- ifelse(applySC,  replace(H2, SC_H_SevEr,NA),   H2)
-H4 <- ifelse(applyITC, replace(H3, ITC_SevEr, NA),   H3)
-H5 <- ifelse(applyST,  replace(H4, ST_H_SevEr, NA),  H4)
+H1 <- switch(applyINT+1, H_raw, replace(as.vector(H_raw), INT_H_SevEr, NA))
+H2 <- switch(applyLSR+1, H1, replace(H1, LSR_H_SevEr, NA))
+H3 <- switch(applySC+1,  H2, replace(H2, SC_H_SevEr,NA))
+H4 <- switch(applyITC+1, H3, replace(H3, ITC_SevEr, NA))
+H5 <- switch(applyST+1,  H4, replace(H4, ST_H_SevEr, NA))
 
-TAU1 <- ifelse(applyINT, replace(as.vector(TAU_raw), INT_TAU_SevEr, NA), TAU_raw)
-TAU2 <- ifelse(applyLSR, replace(TAU1, LSR_TAU_SevEr, NA), TAU1)
-TAU3 <- ifelse(applySC,  replace(TAU2, SC_TAU_SevEr,NA),   TAU2)
-TAU4 <- ifelse(applyITC, replace(TAU3, ITC_SevEr, NA),     TAU3)
-TAU5 <- ifelse(applyST,  replace(TAU4, ST_TAU_SevEr, NA),  TAU4)
+TAU1 <- switch(applyINT+1, TAU_raw, replace(as.vector(TAU_raw), INT_TAU_SevEr, NA))
+TAU2 <- switch(applyLSR+1, TAU1, replace(TAU1, LSR_TAU_SevEr, NA))
+TAU3 <- switch(applySC+1,  TAU2, replace(TAU2, SC_TAU_SevEr,NA))
+TAU4 <- switch(applyITC+1, TAU3, replace(TAU3, ITC_SevEr, NA))
+TAU5 <- switch(applyST+1,  TAU4, replace(TAU4, ST_TAU_SevEr, NA))
 
 
 #################################################################################################################################################################################################################
