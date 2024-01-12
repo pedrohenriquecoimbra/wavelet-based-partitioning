@@ -19,7 +19,7 @@ def main(sitename, inputpath, outputpath, datetimerange, samplingrate=20):
     # Select covariances
     # x*y → Cov(x, y)
     # x*y*z*... → Cov(x, y)|Cov(x, z),Cov(x, ...)
-    configure.varstorun = ['co2*co2', 'h2o*h2o', 'ts*ts', 'w*co2*h2o', 'w*h2o*co2', 'w*ts*co2']
+    configure.varstorun = ['co2*co2', 'h2o*h2o', 'ts*ts', 'w*co2*h2o', 'w*h2o*co2', 'w*ts*co2', 'uw', 'vw']
 
     # Select period of interest
     # [START_DATE, END_DATE, FILE_FREQUENCY]
@@ -48,11 +48,8 @@ if __name__ == '__main__':
     parser.add_argument('inputpath',  type=str)
     parser.add_argument('outputpath', type=str)
     parser.add_argument('datetimerange', type=str)
-    parser.add_argument('-s', '--sitename',   type=str, required=False)
-    parser.add_argument('-i', '--inputpath',  type=str, required=False)
-    parser.add_argument('-o', '--outputpath', type=str, required=False)
-    parser.add_argument('-d', '--datetimerange', type=str, required=False)
-    parser.add_argument('-sr', '--samplingrate', type=str, required=False)
+    parser.add_argument('samplingrate', type=float, nargs='?', default=20)
+    parser.add_argument('-sr', '--samplingrate', type=float, default=20)
     args = parser.parse_args()
 
     main(**vars(args))
