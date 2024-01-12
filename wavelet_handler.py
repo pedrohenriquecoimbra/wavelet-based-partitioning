@@ -19,7 +19,7 @@ def main(sitename, inputpath, outputpath, datetimerange, samplingrate=20, filedu
     # Select covariances
     # x*y → Cov(x, y)
     # x*y*z*... → Cov(x, y)|Cov(x, z),Cov(x, ...)
-    configure.varstorun = ['co2*co2', 'h2o*h2o', 'ts*ts', 'w*co2*h2o', 'w*h2o*co2', 'w*ts*co2', 'uw', 'vw']
+    configure.varstorun = ['co2*co2', 'h2o*h2o', 'ts*ts', 'w*co2*h2o', 'w*h2o*co2', 'w*ts*co2', 'u*w', 'v*w']
 
     # Select period of interest
     # [START_DATE, END_DATE, FILE_FREQUENCY]

@@ -238,7 +238,7 @@ def run_wt(ymd, varstorun, raw_kwargs, output_path, wt_kwargs={},
 
 
     for i, yl in enumerate(ymd):
-        date = re.sub('[-: ]', '', yl.strftime('%')[0])
+        date = re.sub('[-: ]', '', str(yl[0]))#yl.strftime('%')[0])
         if file_duration.endswith("D"): date = date[:8]
         if file_duration.endswith("H") or file_duration.endswith("Min"): date = date[:12]
         
