@@ -130,7 +130,7 @@ def __idwt__(*args, N, level=None, wave="db6"):
 def universal_wt(signal, method, fs=20, f0=1/(3*60*60), f1=10, fn=100, 
                  dj=1/12, inv=True, **kwargs):
     """
-    function: performs Continuous Wavelet Transform
+    function: performs Wavelet Transform
     call: universal_wt()
     Input:
         signal: 1D array
@@ -204,20 +204,27 @@ def run_wt(ymd, varstorun, raw_kwargs, output_path, wt_kwargs={},
            averaging=[30], condsamp=[], integrating=30*60, 
            overwrite=False, saveraw=False, file_duration="1D", verbosity=1):
     """
-    fs = 20, f0 = 1/(3*60*60), f1 = 10, fn = 100, agg_avg = 1, 
-    suffix = "", mother = pycwt.wavelet.MexicanHat(),
-    **kwargs):
+    Handler for universal_wt
+    Cφ: Correct for cross-frequency multiplication to get covariance from simple multiplication between variables for each frequency (https://doi.org/10.2139/ssrn.4642939)
     """
+    # Input the default parameters
+    wt_default = {
+        'fs': 20, 'f0': 1/(3*60*60), 'mother': 'morlet',
+    }
+    # Update arguments, considering input (priority) and default
+    wt_default.update(wt_kwargs)
+    wt_kwargs = wt_default
+
     assert method in [
         'dwt', 'cwt', 'fcwt'], "Method not found. Available methods are: dwt, cwt, fcwt"
     if verbosity: print(f'\nRUNNING WAVELET TRASNFORM ({method})\n')
     if method in ["cwt", "fcwt"]:
-        if method == "fcwt" or "mother" not in wt_kwargs.keys() or wt_kwargs.get("mother") in ['morlet', 'Morlet', pycwt.wavelet.Morlet(6)]:
+        if method == "fcwt" or "mother" not in wt_kwargs.keys() or wt_kwargs.get("mother", 'Morlet') in ['morlet', 'Morlet', pycwt.wavelet.Morlet(6)]:
             Cφ = 5.271
         else:
             Cφ = 16.568
     
-    dt = 1 / wt_kwargs.get("fs", 20)
+    dt = 1 / wt_kwargs["fs"]
     suffix = raw_kwargs['suffix'] if 'suffix' in raw_kwargs.keys() else ''
     
     _, _, _f = ymd
@@ -227,7 +234,7 @@ def run_wt(ymd, varstorun, raw_kwargs, output_path, wt_kwargs={},
             N=pd.to_timedelta(file_duration)/pd.to_timedelta("1S") * dt**-1,
             n_=_f, **wt_kwargs)/2
     else:
-        buffer = bufferforfrequency(wt_kwargs.get("f0", 1/(3*60*60))) / 2
+        buffer = bufferforfrequency(wt_kwargs["f0"]) / 2
 
 
     for i, yl in enumerate(ymd):
