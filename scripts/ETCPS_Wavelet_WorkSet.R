@@ -83,6 +83,7 @@ wavelet <- function(
   # FC = 1/vd * w'r' , vd= va*Pa/Pd, Pd=Pa-e [https://www.licor.com/env/support/EddyPro/topics/calculate-flux-level-0.html#Frictionvelocityums1]
   rfcs$'CO2flux' <- NA
   rfcs$'CO2flux' <- wlfo$'wco2'/epfo$'air_molar_volume'
+  rfcs$'CO2flux' <- rfcs$'CO2flux'*rfcs$'CO2scf'
   # windows()
   # plot(epfo$'co2_flux', type='o')
   # points(rfcs$'CO2flux', type='o', col=4)
@@ -90,6 +91,7 @@ wavelet <- function(
   # . Replace LE (correct LEwl with lambda) -----------------------------------
   rfcs$'LE' <- NA
   rfcs$'LE' <- wlfo$'wh2o'/epfo$'air_molar_volume'*(10^-3)*0.01802*(10^3*(3147.5-2.37*epfo$'air_temperature'))
+  rfcs$'LE' <- rfcs$'LE'*rfcs$'H2Oscf'
   # windows()
   # plot(epfo$LE, type='o')
   # points(rfcs$'LE', type='o', col=4)
@@ -97,6 +99,7 @@ wavelet <- function(
   # . Replace H (correct Hwl with ?) ------------------------------------------
   rfcs$'H' <- NA
   rfcs$'H' <- wlfo$'wts'*epfo$'air_heat_capacity'*epfo$'air_density'
+  rfcs$'H' <- rfcs$'H'*rfcs$'Hscf'
   # windows()
   # plot(epfo$H, type='o')
   # points(rfcs$'H', type='o', col=4)
