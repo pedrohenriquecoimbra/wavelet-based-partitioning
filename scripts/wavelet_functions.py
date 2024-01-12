@@ -209,7 +209,7 @@ def run_wt(ymd, varstorun, raw_kwargs, output_path, wt_kwargs={},
     """
     # Input the default parameters
     wt_default = {
-        'fs': 20, 'f0': 1/(3*60*60), 'mother': 'morlet',
+        'fs': 20, 'f0': 1/(3*60*60),
     }
     # Update arguments, considering input (priority) and default
     wt_default.update(wt_kwargs)
