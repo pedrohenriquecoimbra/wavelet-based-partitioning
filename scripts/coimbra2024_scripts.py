@@ -508,9 +508,9 @@ def loaddatawithbuffer(d0, d1=None, freq=None, buffer=None,
 
     # garantee all data points, if any valid time, else empty dataframe
     if np.sum(np.isnat(data.data.TIMESTAMP)==False):
-        data.data = pd.merge(pd.DataFrame({tname: pd.date_range(*nanminmax(data.data.TIMESTAMP), freq="0.05S")}),
-                            data.data,
-                            on=tname, how='outer').reset_index(drop=True)
+        #data.data = pd.merge(pd.DataFrame({tname: pd.date_range(*nanminmax(data.data.TIMESTAMP), freq="0.05S")}),
+        #                    data.data,
+        #                    on=tname, how='outer').reset_index(drop=True)
         return data.data
     else:
         pd.DataFrame()

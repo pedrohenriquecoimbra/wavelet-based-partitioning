@@ -50,8 +50,10 @@ if __name__ == '__main__':
     parser.add_argument('datetimerange', type=str)
     parser.add_argument('samplingrate', type=int, nargs='?', default=20)
     parser.add_argument('fileduration', type=int, nargs='?', default=30)
+    #parser.add_argument('covariance', type=str, nargs='+', default=None)
     parser.add_argument('-sr', '--samplingrate', type=int, default=20)
     parser.add_argument('-fd', '--fileduration', type=int, default=30)
+    #parser.add_argument('-cov', '--covariance', type=str, default=None)
     args = parser.parse_args()
 
     main(**vars(args))
