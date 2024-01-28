@@ -20,6 +20,7 @@ import sys
 from contextlib import contextmanager
 
 # 3rd party modules
+from sklearn.linear_model import LinearRegression
 import yaml
 import numpy as np
 from functools import reduce
@@ -118,6 +119,52 @@ def partitionDWCS(data, labelpositive='DW_GPP', labelnegative='DW_Reco', all='DW
     data[labelnegative] = (data[all] - data[labelpositive])
     return data
 
+
+def summarisestats(X, y, fit_intercept=False):
+    statisticsToReturn = structuredData()
+    X = np.array(X)
+    y = np.array(y)
+    NaN = np.isnan(X) + np.isnan(y)
+    X = X[NaN==0]
+    y = y[NaN==0]
+    statisticsToReturn.me = np.nanmean((X-y)).round(2)
+    statisticsToReturn.mae = np.nanmean(abs(X-y)).round(2)
+    regression = LinearRegression(fit_intercept=fit_intercept)
+    regression.fit(X.reshape(-1, 1), y.reshape(-1, 1))
+    statisticsToReturn.m = regression.coef_[0][0]
+    b = regression.intercept_
+    statisticsToReturn.b = b
+    b_ = np.round(b[0], 2) if b else 0
+    b_ = "+" + str(b_) if b_ >= 0 else str(b_)
+    statisticsToReturn.r2 = regression.score(X.reshape(-1, 1), y.reshape(-1, 1))
+    return statisticsToReturn
+
+def summarisestatslabel(meta, xn, yn):    
+    stat_label = f"R²: {np.round(meta.r2, 2)}"
+    stat_label = stat_label + f"\nME: {np.round(meta.me, 2)}"
+    stat_label = stat_label + f"\nMAE: {np.round(meta.mae, 2)}"
+    stat_label = stat_label + f"\n{yn}={np.round(meta.m, 2)} {xn}"
+    return stat_label
+    
+def summarisestatstext(meta, xn='x', yn='y'):    
+    stat_label = f"R²= {np.round(meta.r2, 2)}"
+    stat_label = stat_label + f", ME= {np.round(meta.me, 2)} µmol m-2 s-1"
+    stat_label = stat_label + f", MAE= {np.round(meta.mae, 2)} µmol m-2 s-1"
+    stat_label = stat_label + f", {yn}={np.round(meta.m, 2)}"+r"$\times$"+"{xn} linear fit" #×
+    return stat_label
+
+def get_r2(X, y):
+    if len(X)==0:
+        return 0
+    X = np.array(X).ravel()
+    y = np.array(y).ravel()
+    finite = np.isfinite(X*y)
+    X = X[finite].reshape(-1, 1)
+    y = y[finite].reshape(-1, 1)
+    regression = LinearRegression(fit_intercept=True)
+    regression.fit(X, y)
+    r2 = regression.score(X, y)
+    return r2
 
 ##########################################
 ###     GET DATASETS                           
